@@ -31,7 +31,7 @@ public class EmployeeController {
     @PostMapping("/login")
     public R login(@RequestBody Employee employee, HttpSession session) {
 
-        log.debug("********************开始登录啦********************");
+        log.debug("********************开始登录啦~！~！********************");
         //1. 调用service
         Employee loginEmployee = employeeService.login(employee);
 
