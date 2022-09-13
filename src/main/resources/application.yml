@@ -1,0 +1,62 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: reggie_take_out
+#  datasource:
+#    druid:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+#      username: root
+#      password: admin
+#搭建redis环境 第四步ip port配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+#spring cache使用环境搭建 第二步 配置redis过期时间（默认永久有效）
+  cache:
+    redis:
+      time-to-live: 180000
+#Sharding-JDBC实现读写分离 第二步：
+  shardingsphere:
+    datasource:
+      names:
+        master,slave
+      #主数据源
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.188.188:3306/reggie?characterEncoding=utf-8
+        username: root
+        password: root
+      #从数据源
+      slave:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.188.189:3306/reggie?characterEncoding=utf-8
+        username: root
+        password: root
+    masterslave:
+      load-balance-algorithm-type: round_robin #轮询
+      name: dataSource
+      master-data-source-name: master
+      slave-data-source-names: slave
+    props:
+      sql:
+        show: true #显示sql语句
+#配置了sharingjdbc数据源名称dataSource 覆盖原有Druid数据源名称
+  main:
+    allow-bean-definition-overriding: true
+mybatis-plus:
+  configuration:
+    #在映射实体或者属性时，将数据库中表名和字段名中的下划线去掉，按照驼峰命名法映射
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: ASSIGN_ID
+
+#fileDir: D:/itheima132
+fileDir: /usr/local/app/imgs
+
